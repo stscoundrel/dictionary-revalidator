@@ -6,8 +6,7 @@ import java.net.URL
 import org.springframework.stereotype.Service
 
 @Service
-class HTTPClient(
-) {
+class HTTPClient {
     fun get(url: String): Int {
         // For fucks sake, what is with the HTTP clients of JVM ecosystem.
         val connectionUrl = URL(url)
