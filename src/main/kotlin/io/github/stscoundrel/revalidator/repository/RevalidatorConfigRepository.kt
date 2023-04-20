@@ -18,8 +18,7 @@ data class RevalidatorConfig(
 )
 
 @Repository
-class RevalidatorConfigRepository(
-) {
+class RevalidatorConfigRepository {
     fun getConfig(dictionaryType: DictionaryType):  RevalidatorConfig {
         val (url, secret, words) = blueprints[dictionaryType]!!
 

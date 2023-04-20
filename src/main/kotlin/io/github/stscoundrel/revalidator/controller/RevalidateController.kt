@@ -1,6 +1,7 @@
 package io.github.stscoundrel.revalidator.controller
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
@@ -11,6 +12,7 @@ import io.github.stscoundrel.revalidator.enum.DictionaryType
 data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)
 
 @RestController
+@RequestMapping("/api")
 class RevalidateController(val revalidatorService: RevalidatorService) {
     @GetMapping("/old-norse")
     fun oldNorse(): RevalidationResponse {
