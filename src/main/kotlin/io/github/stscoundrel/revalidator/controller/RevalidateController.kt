@@ -46,11 +46,13 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         revalidatorService.revalidateOldSwedish()
 
 
-        return RevalidationResponse(mapOf(
-            DictionaryType.OLD_NORSE to true,
-            DictionaryType.OLD_ICELANDIC to true,
-            DictionaryType.OLD_SWEDISH to true,
-            DictionaryType.OLD_NORWEGIAN to true,
-        ))
+        return RevalidationResponse(
+            mapOf(
+                DictionaryType.OLD_NORSE to true,
+                DictionaryType.OLD_ICELANDIC to true,
+                DictionaryType.OLD_SWEDISH to true,
+                DictionaryType.OLD_NORWEGIAN to true,
+            )
+        )
     }
 }
