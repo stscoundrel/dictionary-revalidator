@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 class RevalidatorApplication
 
 fun main(args: Array<String>) {
-	runApplication<RevalidatorApplication>(*args)
+    runApplication<RevalidatorApplication>(*args)
 }
 
 
