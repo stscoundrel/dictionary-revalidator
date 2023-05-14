@@ -1,16 +1,16 @@
 package io.github.stscoundrel.revalidator.revalidators
 
-import io.github.stscoundrel.revalidator.service.HTTPClient
-import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
+import io.github.stscoundrel.revalidator.service.HTTPClient
 
 
 class Revalidator {
-    val dictionary: DictionaryType
-    val baseUrl: String
-    val secret: String
-    val words: Int
-    val httpClient: HTTPClient
+    private val dictionary: DictionaryType
+    private val baseUrl: String
+    private val secret: String
+    private val words: Int
+    private val httpClient: HTTPClient
 
     constructor(config: RevalidatorConfig, httpClient: HTTPClient) {
         this.dictionary = config.dictionary
@@ -24,36 +24,42 @@ class Revalidator {
         return "$baseUrl/api/revalidate?secret=$secret&start=$start&end=$end"
     }
 
+    private fun log(message: String) {
+        println("${dictionary.name}: $message")
+    }
+
     fun revalidate() {
         var start = 0
 
         try {
-            val retrys = mutableListOf<Pair<Int, Int>>()
+            val retries = mutableListOf<Pair<Int, Int>>()
             while (start < words) {
                 val end = start + 250
                 val statusCode = httpClient.get(getUrl(start, end))
                 if (statusCode == 200) {
-                    println("OK ${statusCode}: Finished words $start - $end")
+                    log("OK ${statusCode}: Finished words $start - $end")
                 } else {
-                    println("FAIL ${statusCode}: Failed words $start - $end! Adding to retrys...")
-                    retrys.add(start to end)
+                    log("FAIL ${statusCode}: Failed words $start - $end! Adding to retries...")
+                    retries.add(start to end)
                 }
                 start = end
             }
 
-            println("Starting retrys:")
+            if (retries.isNotEmpty()) {
+                log("Starting retries. Total of ${retries.size} batches:")
 
-            for ((retryStart, retryEnd) in retrys) {
-                println("$retryStart - $retryEnd")
-                val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
-                if (statusCode == 200) {
-                    println("Successful retry :)")
-                } else {
-                    println("Failed retry :(")
+                for ((retryStart, retryEnd) in retries) {
+                    log("$retryStart - $retryEnd")
+                    val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
+                    if (statusCode == 200) {
+                        log("Successful retry $retryStart - $retryEnd :)")
+                    } else {
+                        log("Failed retry  $retryStart - $retryEnd :(")
+                    }
                 }
             }
 
-            println("All finished!")
+            log("All finished!")
         } catch (e: Exception) {
             println(e)
         }

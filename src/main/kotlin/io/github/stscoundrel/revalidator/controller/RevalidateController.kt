@@ -1,12 +1,10 @@
 package io.github.stscoundrel.revalidator.controller
 
+import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.service.RevalidatorService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-
-import io.github.stscoundrel.revalidator.service.RevalidatorService
-import io.github.stscoundrel.revalidator.enum.DictionaryType
 
 
 data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)

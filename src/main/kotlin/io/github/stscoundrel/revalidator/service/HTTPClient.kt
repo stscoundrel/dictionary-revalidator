@@ -1,9 +1,8 @@
 package io.github.stscoundrel.revalidator.service
 
+import org.springframework.stereotype.Service
 import java.net.HttpURLConnection
 import java.net.URL
-
-import org.springframework.stereotype.Service
 
 @Service
 class HTTPClient {

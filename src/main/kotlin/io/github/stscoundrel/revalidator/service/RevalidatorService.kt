@@ -1,14 +1,9 @@
 package io.github.stscoundrel.revalidator.service
 
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.collections.MutableMap
-import org.springframework.stereotype.Service
-
 import io.github.stscoundrel.revalidator.enum.DictionaryType
-import io.github.stscoundrel.revalidator.revalidators.Revalidator
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfigRepository
-import io.github.stscoundrel.revalidator.service.HTTPClient
+import io.github.stscoundrel.revalidator.revalidators.Revalidator
+import org.springframework.stereotype.Service
 
 @Service
 class RevalidatorService(val configRepository: RevalidatorConfigRepository, val httpClient: HTTPClient) {
