@@ -6,9 +6,8 @@ import io.github.stscoundrel.revalidator.repository.RevalidatorConfigRepository
 import io.github.stscoundrel.revalidator.repository.SecretRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 
 class RevalidatorConfigRepositoryTests {

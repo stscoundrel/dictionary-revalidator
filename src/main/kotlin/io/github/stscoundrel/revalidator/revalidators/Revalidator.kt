@@ -1,8 +1,8 @@
 package io.github.stscoundrel.revalidator.revalidators
 
-import io.github.stscoundrel.revalidator.service.HTTPClient
-import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
+import io.github.stscoundrel.revalidator.service.HTTPClient
 
 
 class Revalidator {

@@ -1,8 +1,7 @@
 package io.github.stscoundrel.revalidator.repository
 
-import org.springframework.stereotype.Repository
 import io.github.stscoundrel.revalidator.enum.DictionaryType
-import io.github.stscoundrel.revalidator.revalidators.Revalidator
+import org.springframework.stereotype.Repository
 
 val blueprints: Map<DictionaryType, Pair<String, Int>> = mapOf(
     DictionaryType.OLD_NORSE to Pair("https://cleasby-vigfusson-dictionary.vercel.app", 35207),
