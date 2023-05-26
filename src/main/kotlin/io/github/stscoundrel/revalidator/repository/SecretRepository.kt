@@ -12,11 +12,11 @@ class SecretRepository {
         return System.getenv("OLD_ICELANDIC_SECRET")
     }
 
-    fun getOldNorwegianSecret(): String {
+    fun getOldSwedishSecret(): String {
         return System.getenv("OLD_SWEDISH_SECRET")
     }
 
-    fun getOldSwedishSecret(): String {
+    fun getOldNorwegianSecret(): String {
         return System.getenv("OLD_NORWEGIAN_SECRET")
     }
 }

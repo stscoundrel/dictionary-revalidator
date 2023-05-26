@@ -2,6 +2,7 @@ package io.github.stscoundrel.revalidator.controller
 
 import io.github.stscoundrel.revalidator.enum.DictionaryType
 import io.github.stscoundrel.revalidator.service.RevalidatorService
+import kotlinx.coroutines.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -12,6 +13,7 @@ data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)
 @RestController
 @RequestMapping("/api")
 class RevalidateController(val revalidatorService: RevalidatorService) {
+
     @GetMapping("/old-norse")
     fun oldNorse(): RevalidationResponse {
         revalidatorService.revalidateOldNorse()
@@ -38,11 +40,17 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
 
     @GetMapping("/")
     fun all(): RevalidationResponse {
-        revalidatorService.revalidateOldIcelandic()
-        revalidatorService.revalidateOldNorse()
-        revalidatorService.revalidateOldNorwegian()
-        revalidatorService.revalidateOldSwedish()
+        val coroutineScope = CoroutineScope(Dispatchers.Default)
+        coroutineScope.launch {
+            val tasks = listOf(
+                async { revalidatorService.revalidateOldNorse() },
+                async { revalidatorService.revalidateOldIcelandic() },
+                async { revalidatorService.revalidateOldSwedish() },
+                async { revalidatorService.revalidateOldNorwegian() },
+            )
 
+            awaitAll(*tasks.toTypedArray())
+        }
 
         return RevalidationResponse(
             mapOf(
