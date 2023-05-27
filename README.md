@@ -4,6 +4,22 @@ Kotlin / Spring Boot API for triggering revalidation actions in various dictiona
 
 Abstracts a few  apikey / secret guarded endpoints in various dictionary projects under the same umbrella, allowing revalidation of pages using one API only.
 
+## Development
+
+`mvn clean && mvn spring-boot-run`
+
+The app requires few env vars. See .env.example.
+
+## Build
+
+Build Docker image:
+
+`docker-compose build`
+
+Run Docker image:
+
+`docker-compose up`
+
 ## Why though
 
 This is essentially just a web service version of existing revalidation scripts shipped with projects like [Old Norse Dictionary](https://github.com/stscoundrel/cleasby-vigfusson-next), [Old Icelandic Dictionary](https://github.com/stscoundrel/old-icelandic-zoega-next), [Old Norwegian Dictionary](https://github.com/stscoundrel/old-norwegian-dictionary-next) and [Old Swedish Dictionary](https://github.com/stscoundrel/old-swedish-dictionary-next).
