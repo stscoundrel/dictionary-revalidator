@@ -10,6 +10,7 @@ class Revalidator {
     private val baseUrl: String
     private val secret: String
     private val words: Int
+    private val batchSize: Int
     private val httpClient: HTTPClient
 
     constructor(config: RevalidatorConfig, httpClient: HTTPClient) {
@@ -17,6 +18,7 @@ class Revalidator {
         this.baseUrl = config.url
         this.secret = config.secret
         this.words = config.words
+        this.batchSize = config.batchSize
         this.httpClient = httpClient
     }
 
@@ -34,7 +36,7 @@ class Revalidator {
         try {
             val retries = mutableListOf<Pair<Int, Int>>()
             while (start < words) {
-                val end = start + 250
+                val end = start + batchSize
                 val statusCode = httpClient.get(getUrl(start, end))
                 if (statusCode == 200) {
                     log("OK ${statusCode}: Finished words $start - $end")

@@ -3,11 +3,11 @@ package io.github.stscoundrel.revalidator.repository
 import io.github.stscoundrel.revalidator.enum.DictionaryType
 import org.springframework.stereotype.Repository
 
-val blueprints: Map<DictionaryType, Pair<String, Int>> = mapOf(
-    DictionaryType.OLD_NORSE to Pair("https://cleasby-vigfusson-dictionary.vercel.app", 35207),
-    DictionaryType.OLD_ICELANDIC to Pair("https://old-icelandic.vercel.app", 29951),
-    DictionaryType.OLD_SWEDISH to Pair("https://old-swedish-dictionary.vercel.app", 41744),
-    DictionaryType.OLD_NORWEGIAN to Pair("https://old-norwegian-dictionary.vercel.app", 42021),
+val blueprints: Map<DictionaryType, Triple<String, Int, Int>> = mapOf(
+    DictionaryType.OLD_NORSE to Triple("https://cleasby-vigfusson-dictionary.vercel.app", 35207, 250),
+    DictionaryType.OLD_ICELANDIC to Triple("https://old-icelandic.vercel.app", 29951, 300),
+    DictionaryType.OLD_SWEDISH to Triple("https://old-swedish-dictionary.vercel.app", 41744, 200),
+    DictionaryType.OLD_NORWEGIAN to Triple("https://old-norwegian-dictionary.vercel.app", 42021, 200),
 )
 
 data class RevalidatorConfig(
@@ -15,6 +15,7 @@ data class RevalidatorConfig(
     val url: String,
     val secret: String,
     val words: Int,
+    val batchSize: Int,
 )
 
 @Repository
@@ -29,14 +30,15 @@ class RevalidatorConfigRepository(val secretRepository: SecretRepository) {
     }
 
     fun getConfig(dictionaryType: DictionaryType): RevalidatorConfig {
-        val (url, words) = blueprints[dictionaryType]!!
+        val (url, words, batchSize) = blueprints[dictionaryType]!!
         val secret = getSecret(dictionaryType)
 
         return RevalidatorConfig(
             dictionary = dictionaryType,
             url = url,
             secret = secret,
-            words = words
+            words = words,
+            batchSize = batchSize
         )
     }
 }

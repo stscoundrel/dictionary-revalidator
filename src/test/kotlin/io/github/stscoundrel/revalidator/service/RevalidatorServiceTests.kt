@@ -70,6 +70,6 @@ class RevalidatorServiceTests {
         }
 
         // We should've received HTTP calls to all revalidation urls + retry for each of them.
-        assertEquals(240, requestedUrls.size)
+        assertEquals(200, requestedUrls.size)
     }
 }
