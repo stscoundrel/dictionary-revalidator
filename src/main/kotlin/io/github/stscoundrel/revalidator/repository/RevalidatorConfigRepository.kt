@@ -4,10 +4,10 @@ import io.github.stscoundrel.revalidator.enum.DictionaryType
 import org.springframework.stereotype.Repository
 
 val blueprints: Map<DictionaryType, Triple<String, Int, Int>> = mapOf(
-    DictionaryType.OLD_NORSE to Triple("https://cleasby-vigfusson-dictionary.vercel.app", 35207, 250),
-    DictionaryType.OLD_ICELANDIC to Triple("https://old-icelandic.vercel.app", 29951, 300),
-    DictionaryType.OLD_SWEDISH to Triple("https://old-swedish-dictionary.vercel.app", 41744, 200),
-    DictionaryType.OLD_NORWEGIAN to Triple("https://old-norwegian-dictionary.vercel.app", 42021, 200),
+    DictionaryType.OLD_NORSE to Triple("https://cleasby-vigfusson-dictionary.vercel.app", 35207, 200),
+    DictionaryType.OLD_ICELANDIC to Triple("https://old-icelandic.vercel.app", 29951, 250),
+    DictionaryType.OLD_SWEDISH to Triple("https://old-swedish-dictionary.vercel.app", 41744, 50),
+    DictionaryType.OLD_NORWEGIAN to Triple("https://old-norwegian-dictionary.vercel.app", 42021, 50),
 )
 
 data class RevalidatorConfig(
