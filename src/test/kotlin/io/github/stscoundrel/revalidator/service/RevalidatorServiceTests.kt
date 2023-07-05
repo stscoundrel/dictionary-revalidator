@@ -36,7 +36,7 @@ class RevalidatorServiceTests {
         }
 
         // Expected amount of calls = total words diviced into 250 sized batches.
-        assertEquals(141, requestedUrls.size)
+        assertEquals(177, requestedUrls.size)
 
         val expectedUrls = listOf(
             "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=0&end=250",
@@ -70,6 +70,6 @@ class RevalidatorServiceTests {
         }
 
         // We should've received HTTP calls to all revalidation urls + retry for each of them.
-        assertEquals(200, requestedUrls.size)
+        assertEquals(240, requestedUrls.size)
     }
 }
