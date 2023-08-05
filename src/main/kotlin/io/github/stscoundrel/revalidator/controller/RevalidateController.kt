@@ -5,6 +5,7 @@ import io.github.stscoundrel.revalidator.service.RevalidatorService
 import kotlinx.coroutines.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 
@@ -15,26 +16,38 @@ data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)
 class RevalidateController(val revalidatorService: RevalidatorService) {
 
     @GetMapping("/old-norse")
-    fun oldNorse(): RevalidationResponse {
-        revalidatorService.revalidateOldNorse()
+    fun oldNorse(
+        @RequestParam("start") start: Int? = null,
+        @RequestParam("end") end: Int? = null
+    ): RevalidationResponse {
+        revalidatorService.revalidateOldNorse(start, end)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
     }
 
     @GetMapping("/old-icelandic")
-    fun oldIcelandic(): RevalidationResponse {
-        revalidatorService.revalidateOldIcelandic()
+    fun oldIcelandic(
+        @RequestParam("start") start: Int? = null,
+        @RequestParam("end") end: Int? = null
+    ): RevalidationResponse {
+        revalidatorService.revalidateOldIcelandic(start, end)
         return RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
     }
 
     @GetMapping("/old-swedish")
-    fun oldSwedish(): RevalidationResponse {
-        revalidatorService.revalidateOldSwedish()
+    fun oldSwedish(
+        @RequestParam("start") start: Int? = null,
+        @RequestParam("end") end: Int? = null
+    ): RevalidationResponse {
+        revalidatorService.revalidateOldSwedish(start, end)
         return RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
     }
 
     @GetMapping("/old-norwegian")
-    fun oldNorwegian(): RevalidationResponse {
-        revalidatorService.revalidateOldNorwegian()
+    fun oldNorwegian(
+        @RequestParam("start") start: Int? = null,
+        @RequestParam("end") end: Int? = null
+    ): RevalidationResponse {
+        revalidatorService.revalidateOldNorwegian(start, end)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
 
