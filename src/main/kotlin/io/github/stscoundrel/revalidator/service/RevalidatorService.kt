@@ -23,23 +23,23 @@ class RevalidatorService(val configRepository: RevalidatorConfigRepository, val 
         return revalidators[dictionaryType]!!
     }
 
-    fun revalidateOldNorse() {
+    fun revalidateOldNorse(start: Int? = null, end: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_NORSE)
-        dictionary.revalidate()
+        dictionary.revalidate(start, end)
     }
 
-    fun revalidateOldIcelandic() {
+    fun revalidateOldIcelandic(start: Int? = null, end: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_ICELANDIC)
-        dictionary.revalidate()
+        dictionary.revalidate(start, end)
     }
 
-    fun revalidateOldSwedish() {
+    fun revalidateOldSwedish(start: Int? = null, end: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_SWEDISH)
-        dictionary.revalidate()
+        dictionary.revalidate(start, end)
     }
 
-    fun revalidateOldNorwegian() {
+    fun revalidateOldNorwegian(start: Int? = null, end: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_NORWEGIAN)
-        dictionary.revalidate()
+        dictionary.revalidate(start, end)
     }
 }

@@ -39,13 +39,47 @@ class RevalidatorServiceTests {
         assertEquals(177, requestedUrls.size)
 
         val expectedUrls = listOf(
-            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=0&end=250",
-            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=250&end=500",
-            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=34750&end=3500",
+            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=0&end=200",
+            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=200&end=400",
+            "https://cleasby-vigfusson-dictionary.vercel.app/api/revalidate?secret=secret1&start=34800&end=35000",
         )
 
         for (expectedUrl in expectedUrls) {
-            assertTrue(expectedUrls.contains(expectedUrl))
+            assertTrue(requestedUrls.contains(expectedUrl))
+        }
+    }
+
+    @Test
+    fun revalidatesDictionaryWithCustomRange() {
+        // Repo secrets.
+        `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
+        `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
+        `when`(secretRepository.getOldNorwegianSecret()).thenReturn("secret3")
+        `when`(secretRepository.getOldSwedishSecret()).thenReturn("secret4")
+
+        // HTTP responses -> always 200.
+        `when`(httpClient.get(anyString())).thenReturn(200)
+
+        // Use Old Swedish as test case.
+        revalidatorService.revalidateOldSwedish(100, 200)
+
+        // We should've received HTTP calls to expected revalidation urls.
+        val invocations = mockingDetails(httpClient).invocations
+
+        val requestedUrls = invocations.map { invocation ->
+            invocation.arguments[0] as String
+        }
+        
+        // Short range should result in two batches.
+        assertEquals(2, requestedUrls.size)
+
+        val expectedUrls = listOf(
+            "https://old-swedish-dictionary.vercel.app/api/revalidate?secret=secret4&start=100&end=150",
+            "https://old-swedish-dictionary.vercel.app/api/revalidate?secret=secret4&start=150&end=200",
+        )
+
+        for (expectedUrl in expectedUrls) {
+            assertTrue(requestedUrls.contains(expectedUrl))
         }
     }
 

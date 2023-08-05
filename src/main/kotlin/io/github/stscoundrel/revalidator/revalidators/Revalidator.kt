@@ -30,21 +30,22 @@ class Revalidator {
         println("${dictionary.name}: $message")
     }
 
-    fun revalidate() {
-        var start = 0
+    fun revalidate(start: Int?, end: Int?) {
+        var current = start ?: 0
+        val max = end ?: words
 
         try {
             val retries = mutableListOf<Pair<Int, Int>>()
-            while (start < words) {
-                val end = start + batchSize
-                val statusCode = httpClient.get(getUrl(start, end))
+            while (current < max) {
+                val rangeEnd = current + batchSize
+                val statusCode = httpClient.get(getUrl(current, rangeEnd))
                 if (statusCode == 200) {
-                    log("OK ${statusCode}: Finished words $start - $end")
+                    log("OK ${statusCode}: Finished words $current - $rangeEnd")
                 } else {
-                    log("FAIL ${statusCode}: Failed words $start - $end! Adding to retries...")
-                    retries.add(start to end)
+                    log("FAIL ${statusCode}: Failed words $current - $rangeEnd! Adding to retries...")
+                    retries.add(current to rangeEnd)
                 }
-                start = end
+                current = rangeEnd
             }
 
             if (retries.isNotEmpty()) {
