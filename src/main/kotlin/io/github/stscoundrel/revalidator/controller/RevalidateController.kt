@@ -18,36 +18,40 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
     @GetMapping("/old-norse")
     fun oldNorse(
         @RequestParam("start") start: Int? = null,
-        @RequestParam("end") end: Int? = null
+        @RequestParam("end") end: Int? = null,
+        @RequestParam("batch") batchSize: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldNorse(start, end)
+        revalidatorService.revalidateOldNorse(start, end, batchSize)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
     }
 
     @GetMapping("/old-icelandic")
     fun oldIcelandic(
         @RequestParam("start") start: Int? = null,
-        @RequestParam("end") end: Int? = null
+        @RequestParam("end") end: Int? = null,
+        @RequestParam("batch") batchSize: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldIcelandic(start, end)
+        revalidatorService.revalidateOldIcelandic(start, end, batchSize)
         return RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
     }
 
     @GetMapping("/old-swedish")
     fun oldSwedish(
         @RequestParam("start") start: Int? = null,
-        @RequestParam("end") end: Int? = null
+        @RequestParam("end") end: Int? = null,
+        @RequestParam("batch") batchSize: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldSwedish(start, end)
+        revalidatorService.revalidateOldSwedish(start, end, batchSize)
         return RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
     }
 
     @GetMapping("/old-norwegian")
     fun oldNorwegian(
         @RequestParam("start") start: Int? = null,
-        @RequestParam("end") end: Int? = null
+        @RequestParam("end") end: Int? = null,
+        @RequestParam("batch") batchSize: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldNorwegian(start, end)
+        revalidatorService.revalidateOldNorwegian(start, end, batchSize)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
 

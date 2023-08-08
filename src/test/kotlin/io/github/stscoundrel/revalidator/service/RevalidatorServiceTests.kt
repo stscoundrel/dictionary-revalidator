@@ -69,13 +69,48 @@ class RevalidatorServiceTests {
         val requestedUrls = invocations.map { invocation ->
             invocation.arguments[0] as String
         }
-        
+
         // Short range should result in two batches.
         assertEquals(2, requestedUrls.size)
 
         val expectedUrls = listOf(
             "https://old-swedish-dictionary.vercel.app/api/revalidate?secret=secret4&start=100&end=150",
             "https://old-swedish-dictionary.vercel.app/api/revalidate?secret=secret4&start=150&end=200",
+        )
+
+        for (expectedUrl in expectedUrls) {
+            assertTrue(requestedUrls.contains(expectedUrl))
+        }
+    }
+
+    @Test
+    fun revalidatesDictionaryWithCustomBatchSize() {
+        // Repo secrets.
+        `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
+        `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
+        `when`(secretRepository.getOldNorwegianSecret()).thenReturn("secret3")
+        `when`(secretRepository.getOldSwedishSecret()).thenReturn("secret4")
+
+        // HTTP responses -> always 200.
+        `when`(httpClient.get(anyString())).thenReturn(200)
+
+        // Use Old Norwegian as test case.
+        revalidatorService.revalidateOldNorwegian(batchSize = 20000)
+
+        // We should've received HTTP calls to expected revalidation urls.
+        val invocations = mockingDetails(httpClient).invocations
+
+        val requestedUrls = invocations.map { invocation ->
+            invocation.arguments[0] as String
+        }
+
+        // Huge bath size should result in only three calls.
+        assertEquals(3, requestedUrls.size)
+
+        val expectedUrls = listOf(
+            "https://old-norwegian-dictionary.vercel.app/api/revalidate?secret=secret3&start=0&end=20000",
+            "https://old-norwegian-dictionary.vercel.app/api/revalidate?secret=secret3&start=20000&end=40000",
+            "https://old-norwegian-dictionary.vercel.app/api/revalidate?secret=secret3&start=40000&end=60000",
         )
 
         for (expectedUrl in expectedUrls) {
