@@ -4,6 +4,7 @@ import io.github.stscoundrel.revalidator.enum.DictionaryType
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.service.HTTPClient
 
+val defaultRetries = 1
 
 class Revalidator {
     private val dictionary: DictionaryType
@@ -30,10 +31,28 @@ class Revalidator {
         println("${dictionary.name}: $message")
     }
 
-    fun revalidate(start: Int?, end: Int?, customBatchSize: Int?) {
+    private fun retry(retries: List<Pair<Int, Int>>, currentRetry: Int): MutableList<Pair<Int, Int>> {
+        log("Starting round ${currentRetry} of retries.")
+        val failedRetries = mutableListOf<Pair<Int, Int>>()
+        for ((retryStart, retryEnd) in retries) {
+            log("$retryStart - $retryEnd")
+            val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
+            if (statusCode == 200) {
+                log("Successful retry $retryStart - $retryEnd :)")
+            } else {
+                log("Failed retry  $retryStart - $retryEnd :(")
+                failedRetries.add(retryStart to retryEnd)
+            }
+        }
+
+        return failedRetries
+    }
+
+    fun revalidate(start: Int?, end: Int?, customBatchSize: Int?, retriesCount: Int?) {
         var current = start ?: 0
         val max = end ?: words
         val batch = customBatchSize ?: batchSize
+        val maxRetries = retriesCount ?: defaultRetries
 
         try {
             val retries = mutableListOf<Pair<Int, Int>>()
@@ -51,15 +70,13 @@ class Revalidator {
 
             if (retries.isNotEmpty()) {
                 log("Starting retries. Total of ${retries.size} batches:")
+                var failedRetries = retries
 
-                for ((retryStart, retryEnd) in retries) {
-                    log("$retryStart - $retryEnd")
-                    val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
-                    if (statusCode == 200) {
-                        log("Successful retry $retryStart - $retryEnd :)")
-                    } else {
-                        log("Failed retry  $retryStart - $retryEnd :(")
-                    }
+                var currentRetry = 1
+
+                while (currentRetry <= maxRetries) {
+                    failedRetries = retry(failedRetries, currentRetry)
+                    currentRetry += 1
                 }
             }
 

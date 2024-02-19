@@ -19,9 +19,10 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
     fun oldNorse(
         @RequestParam("start") start: Int? = null,
         @RequestParam("end") end: Int? = null,
-        @RequestParam("batch") batchSize: Int? = null
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldNorse(start, end, batchSize)
+        revalidatorService.revalidateOldNorse(start, end, batchSize, retries)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
     }
 
@@ -29,9 +30,10 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
     fun oldIcelandic(
         @RequestParam("start") start: Int? = null,
         @RequestParam("end") end: Int? = null,
-        @RequestParam("batch") batchSize: Int? = null
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldIcelandic(start, end, batchSize)
+        revalidatorService.revalidateOldIcelandic(start, end, batchSize, retries)
         return RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
     }
 
@@ -39,9 +41,10 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
     fun oldSwedish(
         @RequestParam("start") start: Int? = null,
         @RequestParam("end") end: Int? = null,
-        @RequestParam("batch") batchSize: Int? = null
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldSwedish(start, end, batchSize)
+        revalidatorService.revalidateOldSwedish(start, end, batchSize, retries)
         return RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
     }
 
@@ -49,9 +52,10 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
     fun oldNorwegian(
         @RequestParam("start") start: Int? = null,
         @RequestParam("end") end: Int? = null,
-        @RequestParam("batch") batchSize: Int? = null
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse {
-        revalidatorService.revalidateOldNorwegian(start, end, batchSize)
+        revalidatorService.revalidateOldNorwegian(start, end, batchSize, retries)
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
 
