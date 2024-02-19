@@ -23,23 +23,23 @@ class RevalidatorService(val configRepository: RevalidatorConfigRepository, val 
         return revalidators[dictionaryType]!!
     }
 
-    fun revalidateOldNorse(start: Int? = null, end: Int? = null, batchSize: Int? = null) {
+    fun revalidateOldNorse(start: Int? = null, end: Int? = null, batchSize: Int? = null, retriesCount: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_NORSE)
-        dictionary.revalidate(start, end, batchSize)
+        dictionary.revalidate(start, end, batchSize, retriesCount)
     }
 
-    fun revalidateOldIcelandic(start: Int? = null, end: Int? = null, batchSize: Int? = null) {
+    fun revalidateOldIcelandic(start: Int? = null, end: Int? = null, batchSize: Int? = null, retriesCount: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_ICELANDIC)
-        dictionary.revalidate(start, end, batchSize)
+        dictionary.revalidate(start, end, batchSize, retriesCount)
     }
 
-    fun revalidateOldSwedish(start: Int? = null, end: Int? = null, batchSize: Int? = null) {
+    fun revalidateOldSwedish(start: Int? = null, end: Int? = null, batchSize: Int? = null, retriesCount: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_SWEDISH)
-        dictionary.revalidate(start, end, batchSize)
+        dictionary.revalidate(start, end, batchSize, retriesCount)
     }
 
-    fun revalidateOldNorwegian(start: Int? = null, end: Int? = null, batchSize: Int? = null) {
+    fun revalidateOldNorwegian(start: Int? = null, end: Int? = null, batchSize: Int? = null, retriesCount: Int? = null) {
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_NORWEGIAN)
-        dictionary.revalidate(start, end, batchSize)
+        dictionary.revalidate(start, end, batchSize, retriesCount)
     }
 }

@@ -119,7 +119,7 @@ class RevalidatorServiceTests {
     }
 
     @Test
-    fun retriesFailedRevalidations() {
+    fun retriesFailedRevalidationsWithDefaultAmount() {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -140,5 +140,45 @@ class RevalidatorServiceTests {
 
         // We should've received HTTP calls to all revalidation urls + retry for each of them.
         assertEquals(240, requestedUrls.size)
+    }
+
+    @Test
+    fun retriesFailedRevalidationsWithCustomAmount() {
+        // Repo secrets.
+        `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
+        `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
+        `when`(secretRepository.getOldNorwegianSecret()).thenReturn("secret3")
+        `when`(secretRepository.getOldSwedishSecret()).thenReturn("secret4")
+
+        // HTTP responses -> always 408 to indicate timeout
+        `when`(httpClient.get(anyString())).thenReturn(408)
+
+        // Allow three retries. Use huge batchsize for easier calculations.
+        revalidatorService.revalidateOldIcelandic(batchSize=50000, retriesCount=3)
+
+        val invocations = mockingDetails(httpClient).invocations
+
+        val requestedUrls = invocations.map { invocation ->
+            invocation.arguments[0] as String
+        }
+
+        // We should've received:
+        // - HTTP calls to revalidation url. Batch is big enough to have all in one call.
+        // - 3 retries.
+        assertEquals(4, requestedUrls.size)
+
+        // Alternative request with smaller batch & larger retries.
+        revalidatorService.revalidateOldIcelandic(batchSize=25000, retriesCount=10)
+
+        val invocations2 = mockingDetails(httpClient).invocations
+
+        val requestedUrls2 = invocations2.map { invocation ->
+            invocation.arguments[0] as String
+        }
+
+        // We should've received:
+        // - 2 HTTP calls to revalidation url. Batch size requires two calls.
+        // - 10 retries for both of failed requests.
+        assertEquals(22, requestedUrls2.size - requestedUrls.size)
     }
 }
