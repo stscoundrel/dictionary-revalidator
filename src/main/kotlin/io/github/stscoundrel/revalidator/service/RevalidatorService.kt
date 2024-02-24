@@ -42,4 +42,9 @@ class RevalidatorService(val configRepository: RevalidatorConfigRepository, val 
         val dictionary = getDictionaryRevalidator(DictionaryType.OLD_NORWEGIAN)
         dictionary.revalidate(start, end, batchSize, retriesCount)
     }
+
+    fun revalidateOldDanish(start: Int? = null, end: Int? = null, batchSize: Int? = null, retriesCount: Int? = null) {
+        val dictionary = getDictionaryRevalidator(DictionaryType.OLD_DANISH)
+        dictionary.revalidate(start, end, batchSize, retriesCount)
+    }
 }

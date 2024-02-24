@@ -8,6 +8,7 @@ val blueprints: Map<DictionaryType, Triple<String, Int, Int>> = mapOf(
     DictionaryType.OLD_ICELANDIC to Triple("https://old-icelandic.vercel.app", 29951, 250),
     DictionaryType.OLD_SWEDISH to Triple("https://old-swedish-dictionary.vercel.app", 41744, 50),
     DictionaryType.OLD_NORWEGIAN to Triple("https://old-norwegian-dictionary.vercel.app", 42021, 50),
+    DictionaryType.OLD_DANISH to Triple("https://old-danish-dictionary.vercel.app", 45500, 200),
 )
 
 data class RevalidatorConfig(
@@ -26,6 +27,7 @@ class RevalidatorConfigRepository(val secretRepository: SecretRepository) {
             DictionaryType.OLD_ICELANDIC -> secretRepository.getOldIcelandicSecret()
             DictionaryType.OLD_NORWEGIAN -> secretRepository.getOldNorwegianSecret()
             DictionaryType.OLD_SWEDISH -> secretRepository.getOldSwedishSecret()
+            DictionaryType.OLD_DANISH -> secretRepository.getOldDanishSecret()
         }
     }
 

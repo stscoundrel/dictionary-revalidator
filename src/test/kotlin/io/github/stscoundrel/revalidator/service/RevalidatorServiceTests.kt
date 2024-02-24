@@ -21,6 +21,7 @@ class RevalidatorServiceTests {
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
         `when`(secretRepository.getOldNorwegianSecret()).thenReturn("secret3")
         `when`(secretRepository.getOldSwedishSecret()).thenReturn("secret4")
+        `when`(secretRepository.getOldDanishSecret()).thenReturn("secret5")
 
         // HTTP responses -> always 200.
         `when`(httpClient.get(anyString())).thenReturn(200)

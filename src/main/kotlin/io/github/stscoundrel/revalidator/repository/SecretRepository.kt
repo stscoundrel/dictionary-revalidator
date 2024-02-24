@@ -19,4 +19,8 @@ class SecretRepository {
     fun getOldNorwegianSecret(): String {
         return System.getenv("OLD_NORWEGIAN_SECRET")
     }
+
+    fun getOldDanishSecret(): String {
+        return System.getenv("OLD_DANISH_SECRET")
+    }
 }
