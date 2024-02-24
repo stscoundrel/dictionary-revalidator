@@ -50,5 +50,11 @@ class RevalidateControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
+
+        mockMvc.perform(
+            get("/api/old-danish")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isUnauthorized())
     }
 }

@@ -59,6 +59,17 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         return RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
 
+    @GetMapping("/old-danish")
+    fun oldDanish(
+        @RequestParam("start") start: Int? = null,
+        @RequestParam("end") end: Int? = null,
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
+    ): RevalidationResponse {
+        revalidatorService.revalidateOldDanish(start, end, batchSize, retries)
+        return RevalidationResponse(mapOf(DictionaryType.OLD_DANISH to true))
+    }
+
     @GetMapping("/")
     fun all(): RevalidationResponse {
         val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -68,6 +79,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
                 async { revalidatorService.revalidateOldIcelandic() },
                 async { revalidatorService.revalidateOldSwedish() },
                 async { revalidatorService.revalidateOldNorwegian() },
+                async { revalidatorService.revalidateOldDanish() },
             )
 
             awaitAll(*tasks.toTypedArray())
@@ -79,6 +91,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
                 DictionaryType.OLD_ICELANDIC to true,
                 DictionaryType.OLD_SWEDISH to true,
                 DictionaryType.OLD_NORWEGIAN to true,
+                DictionaryType.OLD_DANISH to true,
             )
         )
     }

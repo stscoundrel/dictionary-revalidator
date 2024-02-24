@@ -5,4 +5,5 @@ enum class DictionaryType {
     OLD_ICELANDIC,
     OLD_SWEDISH,
     OLD_NORWEGIAN,
+    OLD_DANISH,
 }
