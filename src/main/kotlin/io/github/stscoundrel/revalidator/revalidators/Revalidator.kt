@@ -1,5 +1,7 @@
 package io.github.stscoundrel.revalidator.revalidators
 
+import org.springframework.http.HttpStatus
+
 import io.github.stscoundrel.revalidator.enum.DictionaryType
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.service.HTTPClient
@@ -37,7 +39,7 @@ class Revalidator {
         for ((retryStart, retryEnd) in retries) {
             log("Retries round ${currentRetry}: $retryStart - $retryEnd")
             val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
-            if (statusCode == 200) {
+            if (statusCode == HttpStatus.OK.value()) {
                 log("Retries round ${currentRetry}: Successful retry $retryStart - $retryEnd :)")
             } else {
                 log("Retries round ${currentRetry}: Failed retry  $retryStart - $retryEnd :(")
@@ -59,7 +61,7 @@ class Revalidator {
             while (current < max) {
                 val rangeEnd = current + batch
                 val statusCode = httpClient.get(getUrl(current, rangeEnd))
-                if (statusCode == 200) {
+                if (statusCode == HttpStatus.OK.value()) {
                     log("OK ${statusCode}: Finished words $current - $rangeEnd")
                 } else {
                     log("FAIL ${statusCode}: Failed words $current - $rangeEnd! Adding to retries...")
