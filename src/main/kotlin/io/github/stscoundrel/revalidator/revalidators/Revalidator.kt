@@ -35,12 +35,12 @@ class Revalidator {
         log("Starting round ${currentRetry} of retries.")
         val failedRetries = mutableListOf<Pair<Int, Int>>()
         for ((retryStart, retryEnd) in retries) {
-            log("$retryStart - $retryEnd")
+            log("Retries round ${currentRetry}: $retryStart - $retryEnd")
             val statusCode = httpClient.get(getUrl(retryStart, retryEnd))
             if (statusCode == 200) {
-                log("Successful retry $retryStart - $retryEnd :)")
+                log("Retries round ${currentRetry}: Successful retry $retryStart - $retryEnd :)")
             } else {
-                log("Failed retry  $retryStart - $retryEnd :(")
+                log("Retries round ${currentRetry}: Failed retry  $retryStart - $retryEnd :(")
                 failedRetries.add(retryStart to retryEnd)
             }
         }
@@ -74,7 +74,7 @@ class Revalidator {
 
                 var currentRetry = 1
 
-                while (currentRetry <= maxRetries) {
+                while (currentRetry <= maxRetries && failedRetries.isNotEmpty()) {
                     failedRetries = retry(failedRetries, currentRetry)
                     currentRetry += 1
                 }
