@@ -1,6 +1,6 @@
 package io.github.stscoundrel.revalidator.service
 
-import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.enums.DictionaryType
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfigRepository
 import io.github.stscoundrel.revalidator.revalidators.Revalidator
 import org.springframework.stereotype.Service

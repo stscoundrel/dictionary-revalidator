@@ -1,4 +1,4 @@
-package io.github.stscoundrel.revalidator.enum
+package io.github.stscoundrel.revalidator.enums
 
 enum class DictionaryType {
     OLD_NORSE,
