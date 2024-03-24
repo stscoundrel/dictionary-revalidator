@@ -21,9 +21,9 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("end") end: Int? = null,
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
-    ): RevalidationResponse {
+    ): RevalidationResponse = runBlocking {
         revalidatorService.revalidateOldNorse(start, end, batchSize, retries)
-        return RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
+        RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
     }
 
     @GetMapping("/old-icelandic")
@@ -32,9 +32,9 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("end") end: Int? = null,
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
-    ): RevalidationResponse {
+    ): RevalidationResponse = runBlocking {
         revalidatorService.revalidateOldIcelandic(start, end, batchSize, retries)
-        return RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
+        RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
     }
 
     @GetMapping("/old-swedish")
@@ -43,9 +43,9 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("end") end: Int? = null,
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
-    ): RevalidationResponse {
+    ): RevalidationResponse = runBlocking {
         revalidatorService.revalidateOldSwedish(start, end, batchSize, retries)
-        return RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
+        RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
     }
 
     @GetMapping("/old-norwegian")
@@ -54,9 +54,9 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("end") end: Int? = null,
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
-    ): RevalidationResponse {
+    ): RevalidationResponse = runBlocking {
         revalidatorService.revalidateOldNorwegian(start, end, batchSize, retries)
-        return RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
+        RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
 
     @GetMapping("/old-danish")
@@ -65,27 +65,19 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("end") end: Int? = null,
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
-    ): RevalidationResponse {
+    ): RevalidationResponse = runBlocking {
         revalidatorService.revalidateOldDanish(start, end, batchSize, retries)
-        return RevalidationResponse(mapOf(DictionaryType.OLD_DANISH to true))
+        RevalidationResponse(mapOf(DictionaryType.OLD_DANISH to true))
     }
 
-    @GetMapping("/")
-    fun all(): RevalidationResponse {
-        val coroutineScope = CoroutineScope(Dispatchers.Default)
-        coroutineScope.launch {
-            val tasks = listOf(
-                async { revalidatorService.revalidateOldNorse() },
-                async { revalidatorService.revalidateOldIcelandic() },
-                async { revalidatorService.revalidateOldSwedish() },
-                async { revalidatorService.revalidateOldNorwegian() },
-                async { revalidatorService.revalidateOldDanish() },
-            )
+    @GetMapping("/all")
+    fun all(
+        @RequestParam("batch") batchSize: Int? = null,
+        @RequestParam("retries") retries: Int? = null
+    ): RevalidationResponse = runBlocking {
+        revalidatorService.revalidateAll(batchSize = batchSize, retriesCount = retries)
 
-            awaitAll(*tasks.toTypedArray())
-        }
-
-        return RevalidationResponse(
+        RevalidationResponse(
             mapOf(
                 DictionaryType.OLD_NORSE to true,
                 DictionaryType.OLD_ICELANDIC to true,

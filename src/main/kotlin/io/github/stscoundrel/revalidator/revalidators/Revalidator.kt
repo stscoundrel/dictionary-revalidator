@@ -1,10 +1,9 @@
 package io.github.stscoundrel.revalidator.revalidators
 
-import org.springframework.http.HttpStatus
-
 import io.github.stscoundrel.revalidator.enums.DictionaryType
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.service.HTTPClient
+import org.springframework.http.HttpStatus
 
 val defaultRetries = 1
 
