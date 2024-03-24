@@ -2,6 +2,7 @@ package io.github.stscoundrel.revalidator.service
 
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfigRepository
 import io.github.stscoundrel.revalidator.repository.SecretRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ class RevalidatorServiceTests {
         RevalidatorService(configRepository = revalidatorConfigRepository, httpClient = httpClient)
 
     @Test
-    fun revalidatesGivenDictionary() {
+    fun revalidatesGivenDictionary() = runBlocking {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -51,7 +52,7 @@ class RevalidatorServiceTests {
     }
 
     @Test
-    fun revalidatesDictionaryWithCustomRange() {
+    fun revalidatesDictionaryWithCustomRange() = runBlocking {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -85,7 +86,7 @@ class RevalidatorServiceTests {
     }
 
     @Test
-    fun revalidatesDictionaryWithCustomBatchSize() {
+    fun revalidatesDictionaryWithCustomBatchSize() = runBlocking {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -120,7 +121,7 @@ class RevalidatorServiceTests {
     }
 
     @Test
-    fun retriesFailedRevalidationsWithDefaultAmount() {
+    fun retriesFailedRevalidationsWithDefaultAmount() = runBlocking {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -144,7 +145,7 @@ class RevalidatorServiceTests {
     }
 
     @Test
-    fun retriesFailedRevalidationsWithCustomAmount() {
+    fun retriesFailedRevalidationsWithCustomAmount() = runBlocking {
         // Repo secrets.
         `when`(secretRepository.getOldNorseSecret()).thenReturn("secret1")
         `when`(secretRepository.getOldIcelandicSecret()).thenReturn("secret2")
@@ -154,8 +155,8 @@ class RevalidatorServiceTests {
         // HTTP responses -> always 408 to indicate timeout
         `when`(httpClient.get(anyString())).thenReturn(408)
 
-        // Allow three retries. Use huge batchsize for easier calculations.
-        revalidatorService.revalidateOldIcelandic(batchSize=50000, retriesCount=3)
+        // Allow three retries. Use huge batch size for easier calculations.
+        revalidatorService.revalidateOldIcelandic(batchSize = 50000, retriesCount = 3)
 
         val invocations = mockingDetails(httpClient).invocations
 
@@ -169,7 +170,7 @@ class RevalidatorServiceTests {
         assertEquals(4, requestedUrls.size)
 
         // Alternative request with smaller batch & larger retries.
-        revalidatorService.revalidateOldIcelandic(batchSize=25000, retriesCount=10)
+        revalidatorService.revalidateOldIcelandic(batchSize = 25000, retriesCount = 10)
 
         val invocations2 = mockingDetails(httpClient).invocations
 
