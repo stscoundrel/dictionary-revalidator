@@ -6,7 +6,7 @@ Abstracts a few  apikey / secret guarded endpoints in various dictionary project
 
 ## Development
 
-`mvn clean && mvn spring-boot-run`
+`mvn clean && mvn spring-boot:run`
 
 The app requires few env vars. See .env.example.
 
