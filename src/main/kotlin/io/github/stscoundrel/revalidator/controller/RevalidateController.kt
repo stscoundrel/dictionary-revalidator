@@ -1,6 +1,6 @@
 package io.github.stscoundrel.revalidator.controller
 
-import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.enums.DictionaryType
 import io.github.stscoundrel.revalidator.service.RevalidatorService
 import kotlinx.coroutines.*
 import org.springframework.web.bind.annotation.GetMapping

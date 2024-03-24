@@ -1,9 +1,7 @@
-package io.github.stscoundrel.revalidator
+package io.github.stscoundrel.revalidator.repository
 
 
-import io.github.stscoundrel.revalidator.enum.DictionaryType
-import io.github.stscoundrel.revalidator.repository.RevalidatorConfigRepository
-import io.github.stscoundrel.revalidator.repository.SecretRepository
+import io.github.stscoundrel.revalidator.enums.DictionaryType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock

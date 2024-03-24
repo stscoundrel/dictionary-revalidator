@@ -1,6 +1,6 @@
 package io.github.stscoundrel.revalidator.repository
 
-import io.github.stscoundrel.revalidator.enum.DictionaryType
+import io.github.stscoundrel.revalidator.enums.DictionaryType
 import org.springframework.stereotype.Repository
 
 val blueprints: Map<DictionaryType, Triple<String, Int, Int>> = mapOf(
