@@ -22,37 +22,37 @@ class RevalidateControllerTests {
     @Test
     fun requiresSecretAuth() {
         mockMvc.perform(
-            get("/api")
+            get("/api/revalidate")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
 
         mockMvc.perform(
-            get("/api/old-norse")
+            get("/api/revalidate/old-norse")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
 
         mockMvc.perform(
-            get("/api/old-icelandic")
+            get("/api/revalidate/old-icelandic")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
 
         mockMvc.perform(
-            get("/api/old-norwegian")
+            get("/api/revalidate/old-norwegian")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
 
         mockMvc.perform(
-            get("/api/old-swedish")
+            get("/api/revalidate/old-swedish")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
 
         mockMvc.perform(
-            get("/api/old-danish")
+            get("/api/revalidate/old-danish")
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isUnauthorized())
