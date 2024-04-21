@@ -10,10 +10,11 @@ import org.mockito.Mockito.*
 
 class RevalidatorServiceTests {
     private val httpClient: HTTPClient = mock(HTTPClient::class.java)
+    private val logService: LogService = mock(LogService::class.java)
     private val secretRepository: SecretRepository = mock(SecretRepository::class.java)
     private val revalidatorConfigRepository: RevalidatorConfigRepository = RevalidatorConfigRepository(secretRepository)
     private val revalidatorService =
-        RevalidatorService(configRepository = revalidatorConfigRepository, httpClient = httpClient)
+        RevalidatorService(configRepository = revalidatorConfigRepository, httpClient = httpClient, logService = logService)
 
     @Test
     fun revalidatesGivenDictionary() = runBlocking {

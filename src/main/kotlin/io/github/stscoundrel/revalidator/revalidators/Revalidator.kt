@@ -3,25 +3,24 @@ package io.github.stscoundrel.revalidator.revalidators
 import io.github.stscoundrel.revalidator.enums.DictionaryType
 import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.service.HTTPClient
+import io.github.stscoundrel.revalidator.service.LogService
 import org.springframework.http.HttpStatus
 
-val defaultRetries = 1
+const val defaultRetries = 1
 
-class Revalidator {
+class Revalidator(config: RevalidatorConfig, private val httpClient: HTTPClient, private val logService: LogService) {
     private val dictionary: DictionaryType
     private val baseUrl: String
     private val secret: String
     private val words: Int
     private val batchSize: Int
-    private val httpClient: HTTPClient
 
-    constructor(config: RevalidatorConfig, httpClient: HTTPClient) {
+    init {
         this.dictionary = config.dictionary
         this.baseUrl = config.url
         this.secret = config.secret
         this.words = config.words
         this.batchSize = config.batchSize
-        this.httpClient = httpClient
     }
 
     private fun getUrl(start: Int, end: Int): String {
@@ -29,11 +28,11 @@ class Revalidator {
     }
 
     private fun log(message: String) {
-        println("${dictionary.name}: $message")
+        logService.log(message, dictionary)
     }
 
     private fun retry(retries: List<Pair<Int, Int>>, currentRetry: Int): MutableList<Pair<Int, Int>> {
-        log("Starting round ${currentRetry} of retries.")
+        log("Starting round $currentRetry of retries.")
         val failedRetries = mutableListOf<Pair<Int, Int>>()
         for ((retryStart, retryEnd) in retries) {
             log("Retries round ${currentRetry}: $retryStart - $retryEnd")
