@@ -20,4 +20,24 @@ class LogService(private val logRepository: LogRepository) {
     fun getAll(): List<Log> {
         return logRepository.findAll()
     }
+
+    fun getOldNorse(): List<Log> {
+        return logRepository.findByDictionaryType(DictionaryType.OLD_NORSE)
+    }
+
+    fun getOldIcelandic(): List<Log> {
+        return logRepository.findByDictionaryType(DictionaryType.OLD_ICELANDIC)
+    }
+
+    fun getOldNorwegian(): List<Log> {
+        return logRepository.findByDictionaryType(DictionaryType.OLD_NORWEGIAN)
+    }
+
+    fun getOldSwedish(): List<Log> {
+        return logRepository.findByDictionaryType(DictionaryType.OLD_SWEDISH)
+    }
+
+    fun getOldDanish(): List<Log> {
+        return logRepository.findByDictionaryType(DictionaryType.OLD_DANISH)
+    }
 }
