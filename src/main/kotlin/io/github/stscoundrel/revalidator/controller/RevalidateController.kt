@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/revalidate")
 class RevalidateController(val revalidatorService: RevalidatorService) {
 
     @GetMapping("/old-norse")
