@@ -7,7 +7,11 @@ import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 
 @Service
-class RevalidatorService(val configRepository: RevalidatorConfigRepository, val httpClient: HTTPClient) {
+class RevalidatorService(
+    val configRepository: RevalidatorConfigRepository,
+    val httpClient: HTTPClient,
+    val logService: LogService
+) {
     private val revalidators: MutableMap<DictionaryType, Revalidator?> = mutableMapOf(
         DictionaryType.OLD_NORSE to null,
         DictionaryType.OLD_ICELANDIC to null,
@@ -18,7 +22,8 @@ class RevalidatorService(val configRepository: RevalidatorConfigRepository, val 
     private fun getDictionaryRevalidator(dictionaryType: DictionaryType): Revalidator {
         if (revalidators[dictionaryType] == null) {
             val config = configRepository.getConfig(dictionaryType)
-            revalidators[dictionaryType] = Revalidator(config, httpClient)
+            revalidators[dictionaryType] =
+                Revalidator(config = config, httpClient = httpClient, logService = logService)
         }
 
         return revalidators[dictionaryType]!!
