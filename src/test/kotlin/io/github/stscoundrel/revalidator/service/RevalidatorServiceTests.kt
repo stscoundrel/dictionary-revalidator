@@ -14,7 +14,11 @@ class RevalidatorServiceTests {
     private val secretRepository: SecretRepository = mock(SecretRepository::class.java)
     private val revalidatorConfigRepository: RevalidatorConfigRepository = RevalidatorConfigRepository(secretRepository)
     private val revalidatorService =
-        RevalidatorService(configRepository = revalidatorConfigRepository, httpClient = httpClient, logService = logService)
+        RevalidatorService(
+            configRepository = revalidatorConfigRepository,
+            httpClient = httpClient,
+            logService = logService
+        )
 
     @Test
     fun revalidatesGivenDictionary() = runBlocking {
