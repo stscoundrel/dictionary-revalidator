@@ -18,26 +18,26 @@ class LogService(private val logRepository: LogRepository) {
     }
 
     fun getAll(): List<Log> {
-        return logRepository.findAll()
+        return logRepository.findAllByOrderByTimestampDesc()
     }
 
     fun getOldNorse(): List<Log> {
-        return logRepository.findByDictionaryType(DictionaryType.OLD_NORSE)
+        return logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_NORSE)
     }
 
     fun getOldIcelandic(): List<Log> {
-        return logRepository.findByDictionaryType(DictionaryType.OLD_ICELANDIC)
+        return logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_ICELANDIC)
     }
 
     fun getOldNorwegian(): List<Log> {
-        return logRepository.findByDictionaryType(DictionaryType.OLD_NORWEGIAN)
+        return logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_NORWEGIAN)
     }
 
     fun getOldSwedish(): List<Log> {
-        return logRepository.findByDictionaryType(DictionaryType.OLD_SWEDISH)
+        return logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_SWEDISH)
     }
 
     fun getOldDanish(): List<Log> {
-        return logRepository.findByDictionaryType(DictionaryType.OLD_DANISH)
+        return logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_DANISH)
     }
 }
