@@ -50,17 +50,17 @@ class LogRepositoryTests @Autowired constructor(
 
     @Test
     fun getsAll() {
-        val allLogs = logRepository.findAll()
+        val allLogs = logRepository.findAllByOrderByTimestampDesc()
         assertEquals(11, allLogs.size)
     }
 
     @Test
     fun findsLogsByDictionaryType() {
-        val icelandicLogs = logRepository.findByDictionaryType(DictionaryType.OLD_ICELANDIC)
-        val norseLogs = logRepository.findByDictionaryType(DictionaryType.OLD_NORSE)
-        val norwegianLogs = logRepository.findByDictionaryType(DictionaryType.OLD_NORWEGIAN)
-        val swedishLogs = logRepository.findByDictionaryType(DictionaryType.OLD_SWEDISH)
-        val danishLogs = logRepository.findByDictionaryType(DictionaryType.OLD_DANISH)
+        val icelandicLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_ICELANDIC)
+        val norseLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_NORSE)
+        val norwegianLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_NORWEGIAN)
+        val swedishLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_SWEDISH)
+        val danishLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_DANISH)
 
         assertEquals(2, icelandicLogs.size)
         assertEquals(3, norseLogs.size)
@@ -87,5 +87,43 @@ class LogRepositoryTests @Autowired constructor(
         danishLogs.forEach {
             assertEquals(DictionaryType.OLD_DANISH, it.dictionaryType)
         }
+    }
+
+    @Test
+    fun returnsFoundLogsLatestFirst() {
+        val logs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_SWEDISH)
+        val expectedLogs = listOf(
+            "Swedish test message 4",
+            "Swedish test message 3",
+            "Swedish test message 2",
+            "Swedish test message 1",
+        )
+
+        // Initial logs in expected order.
+        assertEquals(
+            expectedLogs,
+            logs.map { it.message }
+        )
+
+        // Add additional log.
+        logRepository.save(
+            Log(
+                message = "Swedish test message 5, which is totally new",
+                dictionaryType = DictionaryType.OLD_SWEDISH,
+            )
+        )
+
+        val updatedLogs = logRepository.findByDictionaryTypeOrderByTimestampDesc(DictionaryType.OLD_SWEDISH)
+
+        assertEquals(
+            listOf(
+                "Swedish test message 5, which is totally new",
+                "Swedish test message 4",
+                "Swedish test message 3",
+                "Swedish test message 2",
+                "Swedish test message 1",
+            ),
+            updatedLogs.map { it.message }
+        )
     }
 }
