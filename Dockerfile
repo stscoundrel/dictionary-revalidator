@@ -1,5 +1,5 @@
 # Specify the base image
-FROM maven:3.9-eclipse-temurin-17-alpine
+FROM maven:3-eclipse-temurin-24-alpine
 
 # Copy the application files
 COPY . /app
