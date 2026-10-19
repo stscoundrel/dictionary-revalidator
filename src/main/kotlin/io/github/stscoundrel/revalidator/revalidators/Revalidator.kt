@@ -5,6 +5,7 @@ import io.github.stscoundrel.revalidator.repository.RevalidatorConfig
 import io.github.stscoundrel.revalidator.service.HTTPClient
 import io.github.stscoundrel.revalidator.service.LogService
 import org.springframework.http.HttpStatus
+import kotlin.math.ceil
 
 const val defaultRetries = 1
 
@@ -55,17 +56,20 @@ class Revalidator(config: RevalidatorConfig, private val httpClient: HTTPClient,
         val maxRetries = retriesCount ?: defaultRetries
 
         try {
+            val totalBatches = ceil((max.toDouble() - current) / batch).toInt()
+            var currentBatch = 1
             val retries = mutableListOf<Pair<Int, Int>>()
             while (current < max) {
                 val rangeEnd = current + batch
                 val statusCode = httpClient.get(getUrl(current, rangeEnd))
                 if (statusCode == HttpStatus.OK.value()) {
-                    log("OK ${statusCode}: Finished words $current - $rangeEnd")
+                    log("OK ${statusCode}: Finished words $current - $rangeEnd (batch $currentBatch/$totalBatches)")
                 } else {
-                    log("FAIL ${statusCode}: Failed words $current - $rangeEnd! Adding to retries...")
+                    log("FAIL ${statusCode}: Failed words $current - $rangeEnd (batch $currentBatch/$totalBatches)! Adding to retries...")
                     retries.add(current to rangeEnd)
                 }
                 current = rangeEnd
+                currentBatch += 1
             }
 
             if (retries.isNotEmpty()) {
