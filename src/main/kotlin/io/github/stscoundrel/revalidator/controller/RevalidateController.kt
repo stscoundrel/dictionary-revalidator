@@ -1,8 +1,11 @@
 package io.github.stscoundrel.revalidator.controller
 
 import io.github.stscoundrel.revalidator.enums.DictionaryType
+import io.github.stscoundrel.revalidator.revalidators.validateRevalidationParameters
 import io.github.stscoundrel.revalidator.service.RevalidatorService
 import kotlinx.coroutines.*
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -15,6 +18,11 @@ data class RevalidationResponse(val statuses: Map<DictionaryType, Boolean>)
 @RequestMapping("/api/revalidate")
 class RevalidateController(val revalidatorService: RevalidatorService) {
 
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun invalidParameters(exception: IllegalArgumentException): ResponseEntity<Map<String, String>> {
+        return ResponseEntity.badRequest().body(mapOf("error" to (exception.message ?: "Invalid revalidation parameters")))
+    }
+
     @GetMapping("/old-norse")
     fun oldNorse(
         @RequestParam("start") start: Int? = null,
@@ -22,6 +30,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(start, end, batchSize, retries)
         revalidatorService.revalidateOldNorse(start, end, batchSize, retries)
         RevalidationResponse(mapOf(DictionaryType.OLD_NORSE to true))
     }
@@ -33,6 +42,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(start, end, batchSize, retries)
         revalidatorService.revalidateOldIcelandic(start, end, batchSize, retries)
         RevalidationResponse(mapOf(DictionaryType.OLD_ICELANDIC to true))
     }
@@ -44,6 +54,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(start, end, batchSize, retries)
         revalidatorService.revalidateOldSwedish(start, end, batchSize, retries)
         RevalidationResponse(mapOf(DictionaryType.OLD_SWEDISH to true))
     }
@@ -55,6 +66,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(start, end, batchSize, retries)
         revalidatorService.revalidateOldNorwegian(start, end, batchSize, retries)
         RevalidationResponse(mapOf(DictionaryType.OLD_NORWEGIAN to true))
     }
@@ -66,6 +78,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(start, end, batchSize, retries)
         revalidatorService.revalidateOldDanish(start, end, batchSize, retries)
         RevalidationResponse(mapOf(DictionaryType.OLD_DANISH to true))
     }
@@ -75,6 +88,7 @@ class RevalidateController(val revalidatorService: RevalidatorService) {
         @RequestParam("batch") batchSize: Int? = null,
         @RequestParam("retries") retries: Int? = null
     ): RevalidationResponse = runBlocking {
+        validateRevalidationParameters(batchSize = batchSize, retriesCount = retries)
         revalidatorService.revalidateAll(batchSize = batchSize, retriesCount = retries)
 
         RevalidationResponse(

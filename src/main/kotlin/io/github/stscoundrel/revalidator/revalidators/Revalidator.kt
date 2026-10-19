@@ -32,7 +32,7 @@ class Revalidator(config: RevalidatorConfig, private val httpClient: HTTPClient,
         logService.log(message, dictionary)
     }
 
-    private fun retry(retries: List<Pair<Int, Int>>, currentRetry: Int): MutableList<Pair<Int, Int>> {
+    private fun retry(retries: List<Pair<Int, Int>>, currentRetry: Long): MutableList<Pair<Int, Int>> {
         log("Starting round $currentRetry of retries.")
         val failedRetries = mutableListOf<Pair<Int, Int>>()
         for ((retryStart, retryEnd) in retries) {
@@ -55,12 +55,14 @@ class Revalidator(config: RevalidatorConfig, private val httpClient: HTTPClient,
         val batch = customBatchSize ?: batchSize
         val maxRetries = retriesCount ?: defaultRetries
 
+        validateRevalidationParameters(current, max, batch, maxRetries)
+
         try {
             val totalBatches = ceil((max.toDouble() - current) / batch).toInt()
             var currentBatch = 1
             val retries = mutableListOf<Pair<Int, Int>>()
             while (current < max) {
-                val rangeEnd = current + batch
+                val rangeEnd = (current.toLong() + batch).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
                 val statusCode = httpClient.get(getUrl(current, rangeEnd))
                 if (statusCode == HttpStatus.OK.value()) {
                     log("OK ${statusCode}: Finished words $current - $rangeEnd (batch $currentBatch/$totalBatches)")
@@ -76,7 +78,7 @@ class Revalidator(config: RevalidatorConfig, private val httpClient: HTTPClient,
                 log("Starting retries. Total of ${retries.size} batches:")
                 var failedRetries = retries
 
-                var currentRetry = 1
+                var currentRetry = 1L
 
                 while (currentRetry <= maxRetries && failedRetries.isNotEmpty()) {
                     failedRetries = retry(failedRetries, currentRetry)
